@@ -26,7 +26,7 @@ TASK
 
 DOCS (attached — apply silently, do not quote back)
 - <doc 1, e.g. tech-stacks.md>
-- <doc 2, e.g. colour-schemes.md>
+- <docs 2–3, e.g. colour-schemes.md + typography.md>
 
 RULES
 - Choose per the attached docs. Decide fast; do not ask questions — list assumptions instead.

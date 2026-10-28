@@ -146,3 +146,5 @@ If design doesn't matter much, skip custom palettes entirely:
 | Data viz, monitoring, technical | Cyan (6) |
 | Minimal, editorial, design-heavy | Monochrome (7) |
 | Time pressure, design irrelevant | Tailwind default (8) |
+
+> Pairing: `typography.md` uses the same row numbers — pick a row here and use the matching font row there.
