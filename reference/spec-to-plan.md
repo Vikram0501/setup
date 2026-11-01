@@ -1,14 +1,14 @@
 # Spec-to-Plan (PDF)
 
 **Covers:** Extracting a working implementation plan from an attached PDF spec in one pass — no clarifying questions, no re-reading, minimal tokens.
-**Send when:** The assessment arrives as a PDF or long-form brief. Attach with the PDF + 1–2 topical reference docs.
-**Assumes:** BUILD master prompt in use. Reference docs already in context apply silently.
+**Send when:** The assessment arrives as a PDF or long-form brief. Reached via `entry.md`; attach with the PDF only if using it standalone.
+**Assumes:** `entry.md` contract in use (plan = checkpoint 1). Reference docs already in context apply silently.
 
 ---
 
 ## The contract
 
-- One pass: extract → classify → plan → implement. The plan is **not** a checkpoint — never wait for approval after emitting it.
+- Flow: extract → classify → plan → **pause** → implement. The plan **is** checkpoint 1: emit it, then stop and wait for the user's confirmation. Never start building before it.
 - Never quote the PDF back. Work from the numbered requirement list you extract once (R1, R2, …) and refer to IDs thereafter.
 - The only permitted question: "PDF unreadable — paste the text." Everything else becomes a numbered assumption.
 - If a grading rubric exists in the PDF, **it is the spec**. Every rubric line becomes a requirement, in rubric order.
@@ -35,7 +35,7 @@ Apply in this order; the first match wins per area. If the matching reference do
 | Stack named | Use it exactly | — |
 | No stack, UI implied | `tech-stacks.md` stack A | Next.js + TS + Tailwind + SQLite |
 | No stack, API/CLI implied | `tech-stacks.md` stack C / D | Hono + Zod + SQLite |
-| UI + no stated design | `colour-schemes.md` row 1 + `typography.md` row 1 (Slate + Inter) | Neutral palette, 16px body |
+| UI + no stated design | `ui-style.md` row 1 (Slate + Inter) | Neutral palette, 16px body |
 | Dashboard / multi-screen | `ui-layout.md` archetype "App shell + sidebar" | Sidebar + one content column |
 | Login / roles mentioned | `auth.md` | bcrypt + JWT, skip OAuth |
 | Tests mentioned | `testing.md` pyramid | 5 API tests minimum |
@@ -59,9 +59,9 @@ DEPLOY: strategy number + fallback
 
 Rules: MVP = the smallest set where every rubric/functional line is demoable. Stretch never delays MVP. Build order always starts with one entity end-to-end (UI → API → DB).
 
-## Step 4 — Implement immediately
+## Step 4 — Implement after confirmation
 
-After emitting the plan: build, don't narrate. Per requirement, tick silently (R-status in your head, not in chat). Only re-mention a requirement if it failed verification or was cut for time.
+After the user confirms (possibly with cuts or changes — those win over the plan): build, don't narrate. Per requirement, tick silently (R-status in your head, not in chat). Only re-mention a requirement if it failed verification or was cut for time.
 
 ## Ambiguity rules
 
@@ -76,7 +76,8 @@ After emitting the plan: build, don't narrate. Per requirement, tick silently (R
 ## Anti-patterns
 
 - Re-pasting or re-reading the PDF after extraction — use R-IDs.
-- Emitting the plan and stopping for feedback — execute.
+- Starting to build right after emitting the plan — the plan is a checkpoint; wait for confirmation.
 - Building stretch or polish before the MVP slice runs.
 - Asking "which features matter?" — the rubric, else the R-order, else your assumptions.
 - Gold-plating entities "for extensibility" — smallest schema that passes all R's.
+- Arguing with a cut — apply it, log it under "Known gaps", continue.

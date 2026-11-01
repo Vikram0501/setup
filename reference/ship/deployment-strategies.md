@@ -1,7 +1,7 @@
 # Deployment Strategies
 
 **Covers:** Deployment options, how to choose one, and step-by-step deploy sequences.
-**Send when:** The task must run somewhere other than your machine — hosted demo, live URL, CI/CD, containerisation.
+**Send when:** The task must run somewhere other than your machine — hosted demo, live URL, CI/CD, containerisation. Pair with `docker-ci.md` only when Docker/CI is asked.
 **Assumes:** JS/TS stacks from tech-stacks.md, but applies generally.
 
 ---
@@ -73,26 +73,8 @@ Sequence:
 
 ## 4. Docker → Fly.io (containerisation)
 
-**Dockerfile** (multi-stage, Node 20):
+Multi-stage Dockerfile + `.dockerignore` + compose: see `docker-ci.md` — attach it with this doc when containers are asked.
 
-```dockerfile
-FROM node:20-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM node:20-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev
-COPY --from=build /app/dist ./dist
-EXPOSE 3000
-CMD ["node", "dist/server.js"]
-```
-
-Sequence:
 ```bash
 docker build -t app . && docker run -p 3000:3000 app   # verify locally first
 fly launch   # interactive; generates fly.toml
@@ -113,25 +95,7 @@ When the assessor runs it locally, deployment means **frictionless reproduction*
 
 ## 6. CI/CD (when "production-grade" or "pipeline" is asked)
 
-GitHub Actions — build + test on every push, deploy on main:
-
-```yaml
-name: CI
-on: [push, pull_request]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20, cache: npm }
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm test
-```
-
-Deploy job: add `if: github.ref == 'refs/heads/main'` with `vercel deploy --prod`, `fly deploy`, or `flyctl`/`render` CLI — pick the target from strategies 1–4.
+The GitHub Actions workflow (lint → build → test on push + PR) lives in `docker-ci.md` — attach it with this doc. Deploy job: `if: github.ref == 'refs/heads/main'` + the CLI for your strategy 1–4 target; secrets live in Settings → Secrets, never in YAML.
 
 **Staging → prod:** two environments (platform env vars), merge to `develop` → staging, tag/merge `main` → prod. Only include this if the prompt asks for it.
 

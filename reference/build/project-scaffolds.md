@@ -2,7 +2,7 @@
 
 **Covers:** Exact folder layout, npm scripts and first-commit contents for stacks A–G in `tech-stacks.md`.
 **Send when:** Starting a build; you want the skeleton decided so feature work starts immediately.
-**Assumes:** Node 20+ (Node 18 pins noted). Stack letter already picked (`stack-selector.md`).
+**Assumes:** Node 20+ (Node 18 pins noted). Stack letter already picked (`meta/selectors.md`).
 
 ---
 

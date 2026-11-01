@@ -1,8 +1,8 @@
 # UI Layout & Usability
 
 **Covers:** Layout, navigation, hierarchy and density rules that keep an interface clear, calm and fast to use.
-**Send when:** Any UI task with more than one screen, a dashboard, or navigation — pair with `colour-schemes.md`.
-**Assumes:** Tailwind or utility CSS; any component library (shadcn/ui etc.).
+**Send when:** Any UI task with more than one screen, a dashboard, or navigation — pair with `ui-style.md`.
+**Assumes:** Tailwind or utility CSS; any component library (shadcn/ui etc.). Type scale comes from `ui-style.md` — sizes there, placement here.
 
 ---
 
@@ -39,16 +39,7 @@ Pick one; don't invent a hybrid under time pressure.
 
 ## Typography hierarchy
 
-| Level | Size | Notes |
-|---|---|---|
-| Page title | `text-2xl`/`text-3xl` semibold | One per page |
-| Section heading | `text-lg`/`text-xl` semibold | |
-| Card / item title | `text-base` medium | |
-| Body | `text-sm`/`text-base` | Secondary text uses muted colour |
-| Caption / meta | `text-xs` | Timestamps, hints, counts |
-
-- Max 2 font sizes per screen region. Never size by eye — use the scale.
-- Left-align everything except empty states, auth pages and hero CTAs.
+Sizes from the `ui-style.md` type scale: page title `text-2xl`/`text-3xl` semibold (one per page) → section `text-lg`/`text-xl` semibold → item title `text-base` medium → body `text-sm`/`text-base` → caption `text-xs`. Max 2 font sizes per screen region; secondary text uses muted colour. Left-align everything except empty states, auth pages and hero CTAs.
 
 ---
 
@@ -114,4 +105,4 @@ Rules:
 - [ ] Every form field has a visible label
 - [ ] Empty, loading and error states exist for data views
 - [ ] Keyboard tab-through reaches all main actions; focus visible
-- [ ] No text below `text-sm`; contrast verified per `colour-schemes.md`
+- [ ] No text below `text-sm`; contrast verified per `ui-style.md`

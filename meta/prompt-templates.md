@@ -1,48 +1,51 @@
 # Prompt Templates (Qoder)
 
 **Covers:** Copy-paste prompts + one-time Qoder setup that maximise output quality per token.
-**Send when:** First doc to reach for — pair with 1–2 reference docs per task.
+**Send when:** First doc to reach for — BUILD prompts pair with `reference/entry.md` + the spec PDF.
 **Assumes:** Qoder IDE/Quest. Qoder rules limit: 100k chars total, natural language only.
 
 ---
 
 ## The five levers (why these prompts look like this)
 
-1. **Input:** send only the docs the task needs — each attached doc is paid for once, in full.
+1. **Input:** send one entry doc, not a doc pile — the agent routes itself and reads only what it needs (unread docs cost 0).
 2. **Repetition:** never re-paste a doc. Refer to it by name ("per `tech-stacks.md`") — it's already in context.
 3. **Output:** demand terseness explicitly. Verbosity is the biggest token sink — cut explanations, not requirements.
 4. **Correctness:** "done" must mean *build verified*, not *code written*. Make verification a command, not a hope.
-5. **No ping-pong:** forbid questions; require assumptions instead. Every clarification round costs a full context reload.
+5. **No ping-pong:** forbid clarifying questions; require assumptions instead. Pauses are scheduled checkpoints (entry.md), not negotiations.
 
 ---
 
 ## Master prompt — BUILD (create an app)
 
 ```
-You are a senior full-stack engineer. Deliver a working, demoable solution.
+You are a senior full-stack engineer. Deliver a working, demoable solution in stages with review checkpoints.
 
 TASK
 <paste the assessment prompt verbatim>
 
-DOCS (attached — apply silently, do not quote back)
-- <doc 1, e.g. tech-stacks.md>
-- <docs 2–3, e.g. colour-schemes.md + typography.md>
+SPEC
+<path to the spec PDF>
+
+SETUP DOCS
+<path to reference/entry.md> — read this first; follow its routing, checkpoint and commit rules exactly.
+
+TIME (optional — delete if unknown)
+<hours, e.g. 4 hours — pace checkpoints to this budget>
 
 RULES
-- Choose per the attached docs. Decide fast; do not ask questions — list assumptions instead.
+- Route to only the docs entry.md selects; never read the whole setup folder. Refer to docs by name, never re-paste.
+- No clarifying questions — list assumptions instead. Work autonomously between checkpoints; stop only at the ones entry.md defines.
 - TypeScript strict. No TODOs, stubs, or dead buttons — every stated feature must work.
-- Terse output: no code explanations, no restating files, no summaries of what you're about to do.
-- One pass: plan → implement → verify → report. Don't ask for permission between steps.
-- Dependencies limited to what the attached docs sanction.
+- Terse output at every checkpoint (≤30 lines): status → proof (commands actually run) → new assumptions → next steps.
+- Commit and push automatically per git-methodology.md at every green milestone — never ask.
+- Dependencies limited to what the routed docs sanction.
 
-DONE = clean clone → install → build passes → app runs. Verify before reporting.
-
-OUTPUT (keep under 30 lines)
-1. Assumptions (≤5 bullets)
-2. File tree
-3. Built + verified: what works, how you proved it
-4. Run commands / URL
+CHECKPOINT 1 — PLAN: emit the plan in spec-to-plan.md format, then STOP and wait for confirmation.
+CHECKPOINT 2+: report status + proof, then wait for "continue".
+FINAL: definition-of-done.md run. DONE = clean clone → install → build passes → app runs → repo pushed.
 ```
+
 
 ## Master prompt — FIX (something is broken)
 
@@ -101,6 +104,7 @@ Create `.qoder/rules/always-apply.md` (type: **Always Apply**):
 - Never ask questions. Make reasonable assumptions and append them as a numbered list.
 - TypeScript strict; no `any` without justification.
 - Never declare done without running the build (and tests if present) — fix failures first.
+- When the task defines checkpoints (see entry.md), stop there and wait — never skip ahead.
 - Attached reference docs override framework defaults.
 ```
 
@@ -111,20 +115,20 @@ Only inviolables belong here — everything task-specific goes in the prompt.
 Create project command `.qoder/commands/build.md` with the **Master prompt — BUILD** body. Invoke:
 
 ```
-/build <paste assessment prompt> + attach chosen docs
+/build <paste assessment prompt> + <PDF path> + <entry.md path>
 ```
 
 Result: the boilerplate never gets re-typed, and you can't forget a rule. Add `fix`, `deploy`, `review` commands the same way. User-level path: `~/.qoder/commands/` (all projects); organize into subfolders if you add many.
 
-### 3. Doc delivery — how to attach reference docs
+### 3. Doc delivery — how docs reach the agent
 
 | Method | When |
 |---|---|
-| **Paste inline** in first message | 1–2 docs, short tasks — fastest |
-| **Repo folder** (`./setup-docs/`) + "read X before building" | Docs are large or agent may not need all of them — unread docs cost 0 tokens |
+| **Setup repo in project** (`./setup/`) + one pointer to `reference/entry.md` | **Standard flow** — agent routes itself, reads only what the spec implies; unread docs cost 0 tokens |
+| **Paste entry.md inline** | Setup repo can't be cloned — paste entry.md + the 2–3 docs its routing names |
 | **AGENTS.md** in project root | Qoder auto-recognises it — use for the rules in step 1, not task docs |
 
-Never attach all docs "just in case" — every attached doc is billed in full, every request.
+FIX / DEPLOY / REVIEW prompts still attach their named docs directly (see each prompt) — no entry doc needed for those.
 
 ### 4. Quest vs Editor
 
@@ -139,9 +143,4 @@ Qoder can rewrite your prompt before sending. **Skip it when you've attached doc
 
 ## Token-saving checklist (before every send)
 
-- [ ] Only docs this task needs are attached (0–2 usually)
-- [ ] Docs already in context are referenced by name, not re-pasted
-- [ ] Prompt has no pleasantries, no duplicated context, no long rationale
-- [ ] Output limits stated (line caps force short answers)
-- [ ] Rules file contains invariants only — nothing task-specific
-- [ ] Question-asking disabled → one round instead of five
+Levers 1–5 above, checked: only the entry doc attached (agent self-routes) · docs in context referenced by name, not re-pasted · no pleasantries or duplicated context · checkpoint output caps stated · rules file has invariants only · clarifying questions disabled.

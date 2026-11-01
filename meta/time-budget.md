@@ -2,7 +2,7 @@
 
 **Covers:** Phase allocation for 2h / 4h / 8h tasks, kill criteria, and what to sacrifice first.
 **Send when:** Task released — pick your budget row before starting. Re-check at every checkpoint.
-**Assumes:** `kickoff-checklist.md` completed.
+**Assumes:** Task classified via `meta/selectors.md` before starting.
 
 ---
 
